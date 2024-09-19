@@ -1,0 +1,111 @@
+<div class="container">
+  <h1 class="title">Weather forecast for London</h1>
+
+  <!-- Date Range Picker -->
+  <mat-card>
+    <h2>Filter by date range</h2>
+    <div class="date-range-container">
+      <mat-form-field appearance="fill">
+        <mat-label>From</mat-label>
+        <mat-select [(ngModel)]="selectedFromDate" (ngModelChange)="applyDateRangeFilter()">
+          <mat-option *ngFor="let date of availableDates" [value]="date">{{ date | date: 'dd/MM/yyyy' }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>To</mat-label>
+        <mat-select [(ngModel)]="selectedToDate" (ngModelChange)="applyDateRangeFilter()">
+          <mat-option *ngFor="let date of availableDates" [value]="date">{{ date | date: 'dd/MM/yyyy' }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Weather Table -->
+    <mat-card class="table-card">
+      <h2>Search data</h2>
+      <mat-form-field class="search-input">
+        <mat-label>Search</mat-label>
+        <input matInput (input)="applyFilter($event)">
+      </mat-form-field>
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- Columns -->
+        <ng-container matColumnDef="datetime">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Date/Time </th>
+          <td mat-cell *matCellDef="let element">{{ element.datetime | date: 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="temperature">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Temperature (°C) </th>
+          <td mat-cell *matCellDef="let element">{{ element.temperature }}</td>
+        </ng-container>
+        <ng-container matColumnDef="humidity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Humidity (%) </th>
+          <td mat-cell *matCellDef="let element">{{ element.humidity }}</td>
+        </ng-container>
+        <ng-container matColumnDef="surface_pressure">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Surface pressure (hPa) </th>
+          <td mat-cell *matCellDef="let element">{{ element.surface_pressure }}</td>
+        </ng-container>
+        <ng-container matColumnDef="weather_state">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Weather state </th>
+          <td mat-cell *matCellDef="let element">{{ element.weather_state }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSize]="10"></mat-paginator>
+    </mat-card>
+  </mat-card>
+
+  <!-- Chart -->
+  <mat-card class="chart-card">
+    <h2>Temperature chart</h2>
+    <div class="chart-container">
+      <canvas baseChart
+              [data]="lineChartData"
+              [options]="lineChartOptions"
+              [legend]="true"
+              [type]="'line'"> </canvas>
+    </div>
+  </mat-card>
+
+  <!-- Heat Index Calculator and History -->
+  <mat-card class="calculator-history-container">
+    <div class="calculator-history">
+      <!-- Heat Index Calculator -->
+      <div class="calculator">
+        <h2>Heat index calculator</h2>
+        <mat-form-field>
+          <mat-label>Temperature unit</mat-label>
+          <mat-select [(ngModel)]="temperatureUnit">
+            <mat-option value="C">Celsius (°C)</mat-option>
+            <mat-option value="F">Fahrenheit (°F)</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Temperature</mat-label>
+          <input matInput [(ngModel)]="temperature" type="number">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Humidity (%)</mat-label>
+          <input matInput [(ngModel)]="humidity" type="number">
+        </mat-form-field>
+        <p><i>Heat Index value cannot be calculated for temperatures less than 26.7°C or 80°F.</i></p>
+        <p *ngIf="heatIndex !== null">Heat Index: {{ heatIndex.toFixed(0) }}°{{ temperatureUnit === 'C' ? 'C' : 'F' }}</p>
+        <button mat-raised-button (click)="calculateHeatIndex()">Calculate Heat Index</button>
+      </div>
+
+      <!-- History -->
+      <div class="history">
+        <h3>Heat Index Calculator history</h3>
+        <ul class="history-list">
+          <li *ngFor="let record of heatIndexHistory; let i = index" [ngClass]="{'newest-record': i === 0}">
+            (T {{ record.temperature }}°{{ record.unit }}, H {{ record.humidity }}%) =
+            {{ record.index !== null && record.index !== undefined ? record.index.toFixed(0) : 'N/A' }}°{{ record.unit }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <br><br>
+  </mat-card>
+  <br>
+</div>

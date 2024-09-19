@@ -1,0 +1,95 @@
+.container {
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+mat-card {
+  margin-bottom: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.search-input {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.table-card, .chart-card {
+  width: 90%;
+  margin: 0 auto;
+}
+
+table {
+  width: 100%;
+}
+
+mat-paginator {
+  margin-top: 20px;
+}
+
+.date-range-container {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.date-range-container mat-form-field {
+  width: 150px;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+}
+
+.calculator-history-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.calculator-history {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.calculator,
+.history {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.calculator button {
+  margin-top: 10px;
+}
+
+.history-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-list li {
+  margin-bottom: 10px;
+}
+
+.newest-record {
+  background-color: #e0f7e0;
+  color: #2e7d32;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px;
+}
